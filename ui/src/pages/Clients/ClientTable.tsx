@@ -1,37 +1,53 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import ClientRow from "./ClientRow";
+import * as React from 'react';
+import { TableVirtuoso, TableComponents } from 'react-virtuoso';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import rowContent from './ClientTableRow';
+import FixedHeaderContent from './ClientTableHeader';
+import { Data } from './ClientTable.utils';
 
-export default function BasicTable({ clients }: { clients: IClient[] }) {
-  return (
-    <TableContainer component={Paper} sx={{ maxWidth: "100%" }}>
-      <Table sx={{ minWidth: 400 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Phone number</TableCell>
-            <TableCell>Email</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {clients.map((client) => (
-            <ClientRow key={client.id} client={client} />
-          ))}
-          {!clients ||
-            (!clients.length && (
-              <TableRow sx={{ padding: 3 }}>
-                <TableCell component="th" scope="row">
-                  No clients
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+const VirtuosoTableComponents: TableComponents<Data> = {
+	Scroller: React.forwardRef<HTMLDivElement>((props, ref) => <TableContainer {...props} ref={ref} />),
+	Table: (props) => (
+		// @ts-ignore
+		<Table
+			{...props}
+			sx={{
+				borderRadius: '6px',
+				borderCollapse: 'separate',
+				backgroundColor: (theme) => theme.palette.background.paper,
+			}}
+		/>
+	),
+	// @ts-ignore
+	TableHead,
+	TableRow: ({ item: _item, ...props }) => (
+		// @ts-ignore
+		<TableRow
+			{...props}
+			sx={{
+				'&:last-child td, &:last-child th': { border: 0 },
+				cursor: 'pointer',
+				'&:hover': {
+					backgroundColor: '#f5f5f5',
+				},
+			}}
+		/>
+	),
+	TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => <TableBody {...props} ref={ref} />),
+};
+
+export default function ReactVirtualizedTable({ clients }: { clients: IClient[] }) {
+	return (
+		<TableVirtuoso
+			data={clients}
+			style={{ width: '100%', borderRadius: '6px' }}
+			components={VirtuosoTableComponents}
+			fixedHeaderContent={FixedHeaderContent}
+			itemContent={rowContent}
+		/>
+	);
 }

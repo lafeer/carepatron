@@ -1,0 +1,16 @@
+{
+	"clients": "Clients",
+	"name": "Nom",
+	"phone": "Téléphone",
+	"email": "Email",
+	"searchClients": "Rechercher des clients",
+	"createNewClient": "Créer un nouveau client",
+	"personalDetails": "Détails personnels",
+	"contactDetails": "Détails du contact",
+	"firstName": "Prénom",
+	"lastName": "Nom de famille",
+	"phoneNumber": "Numéro de téléphone",
+	"createClient": "Créer un client",
+	"back": "Retourner",
+	"continue": "Continuer"
+}
